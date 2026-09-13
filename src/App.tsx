@@ -8,25 +8,27 @@ import { Label } from "@/components/ui/label"
 import { deleteUser, addUser, editUser } from './storeR/todoSlice'
 import './App.css'
 
-function App() {
-  const { data, addUserZ, deleteUserZ, editUserZ } = UsersZ((state:any) => state)
-  const dispatch = useDispatch()
-  const dataR = useSelector((state: { todo?: { data: any } }) => state.todo?.data)
+import type { User } from './types'
 
-  const [editId, setEditId] = useState<any>(null)
+function App() {
+  const { data, addUserZ, deleteUserZ, editUserZ } = UsersZ((state) => state)
+  const dispatch = useDispatch()
+  const dataR = useSelector((state: { todo?: { data: User[] } }) => state.todo?.data)
+
+  const [editId, setEditId] = useState<number | null>(null)
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [status, setStatus] = useState(false)
-  const [age, setAge] = useState("")
+  const [age, setAge] = useState<string | number>("")
   const [job, setJob] = useState("")
   const [isEditing, setIsEditing] = useState(false)
   const [open, setOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<any>(null)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [sort, setSort] = useState("all")
   const [search, setSearch] = useState("")
 
-  const handleEdit = (user: any) => {
+  const handleEdit = (user: User) => {
     setEditId(user.id)
     setName(user.name || "")
     setPhone(user.phone || "")
@@ -48,10 +50,10 @@ function App() {
     setOpen(true)
   }
 
-  const handleAddandEdit = (e: any) => {
+  const handleAddandEdit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (isEditing) {
+    if (isEditing && editId !== null) {
       editUserZ({ id: editId, job, age })
       dispatch(editUser({ id: editId, name, phone, status }))
     } else {
@@ -70,16 +72,16 @@ function App() {
     setOpen(false)
   }
 
-  const dataX = (data || []).map((e: any) => {
-    const elr = (dataR || []).find((el: any) => el.id === e.id) || {}
+  const dataX = (data || []).map((e: User) => {
+    const elr = (dataR || []).find((el: User) => el.id === e.id) || {}
     return { ...elr, ...e, id: e.id }
   })
 
-  const filteredData = dataX.filter((e: any) => {
+  const filteredData = dataX.filter((e: User) => {
     const searchText = search.toLowerCase()
-    const name = e.name.toLowerCase()
-    const phone = e.phone.toLowerCase()
-    const job = e.job.toLowerCase()
+    const name = (e.name || "").toLowerCase()
+    const phone = (e.phone || "").toLowerCase()
+    const job = (e.job || "").toLowerCase()
 
     const searchResult =
       name.includes(searchText) ||
@@ -91,12 +93,12 @@ function App() {
     if (sort === "false") return searchResult && e.status === false
   })
 
-  const handleDelete = (id: any) => {
+  const handleDelete = (id: number) => {
     deleteUserZ(id)
     dispatch(deleteUser(id))
   }
 
-  const handleInfo = (user: any) => {
+  const handleInfo = (user: User) => {
     setSelectedUser(user)
     setInfoOpen(true)
   }
@@ -207,7 +209,7 @@ function App() {
               </thead>
 
               <tbody>
-                {filteredData.map((e: any, index: any) => (
+                {filteredData.map((e: User, index: number) => (
                   <tr key={e.id ?? index} className="border-b transition hover:bg-slate-50">
                     <td className="px-6 py-4 font-medium text-slate-500">#{e.id}</td>
                     <td className="px-6 py-4 font-semibold text-slate-900">{e.name}</td>

@@ -1,6 +1,15 @@
 import {create} from 'zustand'
+import type { User } from '../types'
 
-export const UsersZ = create<any>((set: any) => ({
+interface UsersState {
+  data: User[];
+  addUserZ: (user: User) => void;
+  deleteUserZ: (id: number) => void;
+  editUserZ: (user: User) => void;
+  getByIdZ: (id: number) => void;
+}
+
+export const UsersZ = create<UsersState>((set) => ({
     data:[
   {id:1,job:'programing',age:20},
   {id:2,job:'dastavchik',age:21},
@@ -15,8 +24,8 @@ export const UsersZ = create<any>((set: any) => ({
   {id:11,job:'furushanda',age:19},
   {id:12,job:'oshpaz',age:17},
     ],
-    addUserZ:(newUser: any)=>set((state: any)=>({data:[...state.data,newUser]})),
-    deleteUserZ:(id: any)=>set((state: any)=>({data: state.data.filter((e: any)=>e.id!==id)})),
-    editUserZ:(user: any)=>set((state: any)=>({data: state.data.map((e: any)=>e.id===user.id ? user: e)})),
-    getByIdZ:(id: any)=>set((state: any)=>({data: state.data.filter((e: any)=>e.id===id)})),
+    addUserZ:(newUser)=>set((state)=>({data:[...state.data,newUser]})),
+    deleteUserZ:(id)=>set((state)=>({data: state.data.filter((e)=>e.id!==id)})),
+    editUserZ:(user)=>set((state)=>({data: state.data.map((e)=>e.id===user.id ? user: e)})),
+    getByIdZ:(id)=>set((state)=>({data: state.data.filter((e)=>e.id===id)})),
 }))

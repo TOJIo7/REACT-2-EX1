@@ -1,9 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { User } from '../types'
 
-export const todoSlice = createSlice({
-  name: 'users',
-  initialState: {
-    data:[
+interface TodoState {
+  data: User[];
+  searchWord: string;
+}
+
+const initialState: TodoState = {
+  data: [
       { id: 1, name: "Ibrohim", phone: "+992072321653", status: false },
       { id: 2, name: "muhammad", phone: "+992172321654", status: true },
       { id: 3, name: "soleh", phone: "+992272321655", status: false },
@@ -16,25 +21,28 @@ export const todoSlice = createSlice({
       { id: 10, name: "sunnatullo", phone: "+992972321662", status: true },
       { id: 11, name: "Abdulloh", phone: "+99297232664", status: false },
       { id: 12, name: "maga", phone: "+99297232166", status: true },
-    ],
-    searchWord: "",
-  },
+  ],
+  searchWord: "",
+};
+
+export const todoSlice = createSlice({
+  name: 'users',
+  initialState,
   reducers:{
-    deleteUser:(state, action) => {
+    deleteUser:(state, action: PayloadAction<number>) => {
         state.data = state.data.filter(user => user.id !== action.payload)
     },
-    addUser:(state, action) => {
+    addUser:(state, action: PayloadAction<User>) => {
         state.data = [...state.data, action.payload]
     },
-    editUser:(state, action) => {
+    editUser:(state, action: PayloadAction<User>) => {
         state.data = state.data.map(user => user.id === action.payload.id ? action.payload : user)
     },
-    getByID:(state, action) => {
+    getByID:(state, action: PayloadAction<number>) => {
         state.data = state.data.filter(user => user.id === action.payload)
     }
   }
 })
-
 
 export const {deleteUser, addUser, editUser } = todoSlice.actions
 
