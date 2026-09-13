@@ -13,7 +13,7 @@ function App() {
   const dispatch = useDispatch()
   const dataR = useSelector((state: { todo?: { data: any } }) => state.todo?.data)
 
-  const [editId, setEditId] = useState(null)
+  const [editId, setEditId] = useState<any>(null)
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [status, setStatus] = useState(false)
@@ -22,11 +22,11 @@ function App() {
   const [isEditing, setIsEditing] = useState(false)
   const [open, setOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [selectedUser, setSelectedUser] = useState<any>(null)
   const [sort, setSort] = useState("all")
   const [search, setSearch] = useState("")
 
-  const handleEdit = (user) => {
+  const handleEdit = (user: any) => {
     setEditId(user.id)
     setName(user.name || "")
     setPhone(user.phone || "")
@@ -48,7 +48,7 @@ function App() {
     setOpen(true)
   }
 
-  const handleAddandEdit = (e) => {
+  const handleAddandEdit = (e: any) => {
     e.preventDefault()
 
     if (isEditing) {
@@ -70,12 +70,12 @@ function App() {
     setOpen(false)
   }
 
-  const dataX = (data || []).map((e) => {
-    const elr = (dataR || []).find((el) => el.id === e.id) || {}
+  const dataX = (data || []).map((e: any) => {
+    const elr = (dataR || []).find((el: any) => el.id === e.id) || {}
     return { ...elr, ...e, id: e.id }
   })
 
-  const filteredData = dataX.filter((e) => {
+  const filteredData = dataX.filter((e: any) => {
     const searchText = search.toLowerCase()
     const name = e.name.toLowerCase()
     const phone = e.phone.toLowerCase()
@@ -91,12 +91,12 @@ function App() {
     if (sort === "false") return searchResult && e.status === false
   })
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: any) => {
     deleteUserZ(id)
     dispatch(deleteUser(id))
   }
 
-  const handleInfo = (user) => {
+  const handleInfo = (user: any) => {
     setSelectedUser(user)
     setInfoOpen(true)
   }
@@ -207,7 +207,7 @@ function App() {
               </thead>
 
               <tbody>
-                {filteredData.map((e, index) => (
+                {filteredData.map((e: any, index: any) => (
                   <tr key={e.id ?? index} className="border-b transition hover:bg-slate-50">
                     <td className="px-6 py-4 font-medium text-slate-500">#{e.id}</td>
                     <td className="px-6 py-4 font-semibold text-slate-900">{e.name}</td>
